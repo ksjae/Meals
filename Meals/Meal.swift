@@ -64,7 +64,7 @@ func fetchMeal(forDate: Date){
     let calendar = Calendar.current
     let year = calendar.component(.year, from: forDate)
     let month = calendar.component(.month, from: forDate)
-    let url = URL(string: "https://schoolmenukr.ml/api/ice/E100002238?year=\(year)&month=\(month)")
+    let url = URL(string: "https://schoolmenukr.ml/api/high/E100002238?year=\(year)&month=\(month)")
     
     URLSession.shared.dataTask(with: url!, completionHandler: {
         (data, response, error) in
@@ -73,39 +73,41 @@ func fetchMeal(forDate: Date){
         }else{
             do{
                 //TODO : "급식이 없습니다" 라는 String 처리
-                let json = try? JSONSerialization.jsonObject(with: data!, options: [])
-                if let array = json as? [Dictionary<String, Any>] {
-                    
+                let json = try? JSONSerialization.jsonObject(with: data!, options: []) as? [String: Any]
+                if let array = json!!["menu"] as? [Dictionary<String,Any>] {
+                    print(array)
                     for object in array {
-                        // access all objects in array
-                        var menu: DailyMeal = DailyMeal(date: 0, breakfast: [""], lunch: [""], supper: [""])
-                        
-                        //가끔 날짜가 nil인 경우가 있음
-                        guard let daytoday = Int(object["date"] as! String) else{
-                            continue
-                        }
-                        for (key, value) in object {
-                            guard let value = value as? [String] else{
-                                //밥이 없다(아, 점, 저 중)
+                        if let object  = object as? [String: Any] { //경고라고? 그럼 이거 없이도 컴파일 하든가
+                            // access all objects in array
+                            var menu: DailyMeal = DailyMeal(date: 0, breakfast: [""], lunch: [""], supper: [""])
+                            
+                            //가끔 날짜가 nil인 경우가 있음
+                            guard let daytoday = Int(object["date"] as! String) else{
                                 continue
                             }
-                            if key == "breakfast" {
-                                menu.breakfast = value
+                            for (key, value) in object {
+                                guard let value = value as? [String] else{
+                                    //밥이 없다(아, 점, 저 중)
+                                    continue
+                                }
+                                if key == "breakfast" {
+                                    menu.breakfast = value
+                                }
+                                else if key == "lunch" {
+                                    menu.lunch = value
+                                }
+                                else if key == "dinner" {
+                                    menu.supper = value
+                                }
                             }
-                            else if key == "lunch" {
-                                menu.lunch = value
-                            }
-                            else if key == "dinner" {
-                                menu.supper = value
-                            }
+                            menu.date = daytoday
+                            meals.append (menu)
                         }
-                        menu.date = daytoday
-                        meals.append (menu)
                     }
                 }
             }
         }
-        
+        print(meals)
     }).resume()
 }
 

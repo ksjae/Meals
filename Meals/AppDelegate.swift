@@ -12,7 +12,7 @@ import CoreData
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
 
-    let statusItem = NSStatusBar.system.statusItem(withLength:NSStatusItem.squareLength)
+    let statusItem = NSStatusBar.system.statusItem(withLength:NSStatusItem.variableLength)
     
     let popover = NSPopover()
     var eventMonitor: EventMonitor?
@@ -21,7 +21,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         //메뉴바에 들어갈 이미지를 그림
         if let button = statusItem.button {
             button.image = NSImage(named:NSImage.Name("MenuBar"))
-            button.action = #selector(togglePopover(sender: ))
+            button.action = #selector(determineClick(sender:))
+            button.sendAction(on: [.leftMouseUp, .rightMouseUp])
         }
         
         //밥 데이터가 있는가? 그러면 출력. 아니면 가져오기
@@ -40,7 +41,19 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
     }
     
-    
+    @objc func determineClick(sender: NSStatusBarButton){
+        
+        let event = NSApp.currentEvent!
+        if event.type == NSEvent.EventType.rightMouseUp {
+            constructMenu()
+            statusItem.menu = nil
+        }
+        else {
+            statusItem.menu = nil
+            self.togglePopover(sender: sender)
+            print("2")
+        }
+    }
 
     func applicationWillTerminate(_ aNotification: Notification) {
         // Insert code here to tear down your application
@@ -52,17 +65,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func constructMenu() {
         let menu = NSMenu()
         
-        menu.addItem(NSMenuItem(title: "Meals 종료하기", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
+        menu.addItem(NSMenuItem(title: "프로그램 정지", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
         
         statusItem.menu = menu
+        statusItem.popUpMenu(menu)
     }
     
     @objc func togglePopover(sender: Any?) {
-        let event = NSApp.currentEvent!
-        if event.type == NSEvent.EventType.rightMouseUp {
-            constructMenu()
-        }
-        
         
         if popover.isShown {
             closePopover(sender: sender)
