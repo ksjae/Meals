@@ -30,11 +30,11 @@ struct DailyMeal : Codable{
 var name_list = [NSManagedObject]()
 var dataFetch = 0
 
-func getMeal(){
+func getMeal(date: Date){
     let calendar = Calendar.current
     let appDelegate = NSApplication.shared.delegate as! AppDelegate
     let context = appDelegate.persistentContainer.viewContext
-    let day = calendar.component(.day, from: Date())
+    let day = calendar.component(.day, from: date)
     //let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Data")
     //request.predicate = NSPredicate(format: "age = %@", "12")
     //request.returnsObjectsAsFaults = false
@@ -55,7 +55,7 @@ func getMeal(){
     }
     if(!hasCache){
         print("NO CACHE")
-        fetchMeal(forDate: Date())
+        fetchMeal(forDate: date)
     }
 }
 
@@ -75,7 +75,6 @@ func fetchMeal(forDate: Date){
                 //TODO : "급식이 없습니다" 라는 String 처리
                 let json = try? JSONSerialization.jsonObject(with: data!, options: []) as? [String: Any]
                 if let array = json!!["menu"] as? [Dictionary<String,Any>] {
-                    print(array)
                     for object in array {
                         if let object  = object as? [String: Any] { //경고라고? 그럼 이거 없이도 컴파일 하든가
                             // access all objects in array
@@ -107,7 +106,6 @@ func fetchMeal(forDate: Date){
                 }
             }
         }
-        print(meals)
     }).resume()
 }
 

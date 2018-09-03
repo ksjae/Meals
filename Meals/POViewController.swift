@@ -9,6 +9,8 @@
 import Cocoa
 
 class POViewController: NSViewController {
+    
+    var dateRef = Date()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -19,13 +21,21 @@ class POViewController: NSViewController {
     
     @IBOutlet weak var mealLabel: NSTextField!
     
-    @IBOutlet weak var previous: NSButton!
+    @IBAction func previous(sender: NSButton){
+        dateRef = Calendar.current.date(byAdding: .day, value: -1, to: dateRef)!
+    }
     
-    @IBOutlet weak var next: NSButton!
+    @IBAction func next(sender: NSButton){
+        dateRef = Calendar.current.date(byAdding: .day, value: -1, to: dateRef)!
+    }
     
-    @IBOutlet weak var refresh: NSButton!
+    @IBAction func refresh(sender: NSButton){
+        getMeal(date: dateRef)
+    }
     
-    @IBOutlet weak var settings: NSButton!
+    @IBAction func settings(sender: NSButton){
+        
+    }
     
     @IBOutlet weak var spinningwheel: NSProgressIndicator!
     

@@ -26,7 +26,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
         
         //밥 데이터가 있는가? 그러면 출력. 아니면 가져오기
-        getMeal()
+        getMeal(date: Date())
         
         //창 그리기
         popover.contentViewController = POViewController.freshController()
@@ -51,7 +51,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         else {
             statusItem.menu = nil
             self.togglePopover(sender: sender)
-            print("2")
         }
     }
 
@@ -65,7 +64,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func constructMenu() {
         let menu = NSMenu()
         
-        menu.addItem(NSMenuItem(title: "프로그램 정지", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
+        menu.addItem(NSMenuItem(title: "종료", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
         
         statusItem.menu = menu
         statusItem.popUpMenu(menu)
@@ -86,33 +85,34 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             popover.show(relativeTo: button.bounds, of: button, preferredEdge: NSRectEdge.minY)
         }
         let pViewController = popover.contentViewController as? POViewController
-        let zip = MealatTime(time: Date())
         
-        
-        let today = Date() //현재 시각 구하기
+        var today = Date() //현재 시각 구하기
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "M/d"
         let dateString = dateFormatter.string(from: today)
         let calendar = Calendar.current
         let hour = calendar.component(.hour, from: today)
         
-        if hour<9  || hour>18 {
+        if hour<9 {
             pViewController?.dateLabel.stringValue = dateString + " - 아침"
         }
         else if hour < 14 {
             pViewController?.dateLabel.stringValue = dateString + " - 점심"
         }
-        else {
+        else if hour < 20 {
             pViewController?.dateLabel.stringValue = dateString + " - 저녁"
         }
-        
+        else {
+            today = calendar.date(byAdding: .day, value: 1, to: today)!
+            pViewController?.dateLabel.stringValue = dateString + " - 아침" //내일 아침
+        }
+        let zip = MealatTime(time: today)
         
         
         var printedmeal = ""
         for meal in zip {
             guard let meal = meal as? String else{ //컴파일러 에러 방지용
                 continue
-                //return //컴파일러 에러 방지용 II
             }
             printedmeal = printedmeal + meal
             printedmeal = printedmeal + "\n"
@@ -149,7 +149,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                  * The store could not be migrated to the current model version.
                  Check the error message to determine what the actual problem was.
                  */
-                fatalError("Unresolved error \(error)")
+                fatalError("이런! 에러잖아!\n \(error)")
             }
         })
         return container
@@ -162,7 +162,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let context = persistentContainer.viewContext
         
         if !context.commitEditing() {
-            NSLog("\(NSStringFromClass(type(of: self))) unable to commit editing before saving")
+            NSLog("\(NSStringFromClass(type(of: self))) 저장 전 수정사항 반영에 실패하였습니다")
         }
         if context.hasChanges {
             do {
@@ -185,7 +185,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let context = persistentContainer.viewContext
         
         if !context.commitEditing() {
-            NSLog("\(NSStringFromClass(type(of: self))) unable to commit editing to terminate")
+            NSLog("\(NSStringFromClass(type(of: self))) 종료 전 수정사항 반영에 실패하였습니다")
             return .terminateCancel
         }
         
