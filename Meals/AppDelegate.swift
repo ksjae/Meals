@@ -89,7 +89,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         var today = Date() //현재 시각 구하기
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "M/d"
-        let dateString = dateFormatter.string(from: today)
+        var dateString = dateFormatter.string(from: today)
         let calendar = Calendar.current
         let hour = calendar.component(.hour, from: today)
         
@@ -104,6 +104,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
         else {
             today = calendar.date(byAdding: .day, value: 1, to: today)!
+            dateString = dateFormatter.string(from: today)
             pViewController?.dateLabel.stringValue = dateString + " - 아침" //내일 아침
         }
         let zip = MealatTime(time: today)
