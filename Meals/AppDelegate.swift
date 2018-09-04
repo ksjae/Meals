@@ -115,11 +115,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             guard let meal = meal as? String else{ //컴파일러 에러 방지용
                 continue
             }
-            printedmeal = printedmeal + meal
+            let numberlessMeal = (meal.components(separatedBy: CharacterSet.decimalDigits)).joined(separator: "")
+            printedmeal = printedmeal + (numberlessMeal.components(separatedBy: CharacterSet.punctuationCharacters)).joined(separator: "")
             printedmeal = printedmeal + "\n"
         }
         
         pViewController?.mealLabel.stringValue = printedmeal
+        
+        //버튼 클릭 처리
+        pViewController?.observe(\.dateRef) { (object, change) in
+            print("SomeClass object value changed to \(object.dateRef)")
+        }
     }
     
     func closePopover(sender: Any?) {

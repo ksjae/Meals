@@ -89,6 +89,7 @@ func fetchMeal(forDate: Date){
                                     //밥이 없다(아, 점, 저 중)
                                     continue
                                 }
+
                                 if key == "breakfast" {
                                     menu.breakfast = value
                                 }

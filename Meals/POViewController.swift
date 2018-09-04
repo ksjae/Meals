@@ -10,7 +10,9 @@ import Cocoa
 
 class POViewController: NSViewController {
     
-    var dateRef = Date()
+    @objc dynamic var dateRef = Date()
+    @objc dynamic var refreshClicked = 0
+    @objc dynamic var settingClicked = 0
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,7 +24,7 @@ class POViewController: NSViewController {
     @IBOutlet weak var mealLabel: NSTextField!
     
     @IBAction func previous(sender: NSButton){
-        dateRef = Calendar.current.date(byAdding: .day, value: -1, to: dateRef)!
+        dateRef = Calendar.current.date(byAdding: .day, value: 1, to: dateRef)!
     }
     
     @IBAction func next(sender: NSButton){
@@ -30,11 +32,11 @@ class POViewController: NSViewController {
     }
     
     @IBAction func refresh(sender: NSButton){
-        getMeal(date: dateRef)
+        refreshClicked+=1
     }
     
     @IBAction func settings(sender: NSButton){
-        
+        settingClicked+=1
     }
     
     @IBOutlet weak var spinningwheel: NSProgressIndicator!
