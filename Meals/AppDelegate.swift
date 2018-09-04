@@ -115,8 +115,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             guard let meal = meal as? String else{ //컴파일러 에러 방지용
                 continue
             }
+            
+            //밥에서 . 및 알러지 정보 숫자 제거
             let numberlessMeal = (meal.components(separatedBy: CharacterSet.decimalDigits)).joined(separator: "")
-            printedmeal = printedmeal + (numberlessMeal.components(separatedBy: CharacterSet.punctuationCharacters)).joined(separator: "")
+            
+            printedmeal = printedmeal + numberlessMeal.replacingOccurrences(of: ".", with: "")
             printedmeal = printedmeal + "\n"
         }
         
