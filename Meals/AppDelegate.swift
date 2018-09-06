@@ -99,7 +99,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         else if hour < 14 {
             pViewController?.dateLabel.stringValue = dateString + " - 점심"
         }
-        else if hour < 20 {
+        else if hour < 19 {
             pViewController?.dateLabel.stringValue = dateString + " - 저녁"
         }
         else {
