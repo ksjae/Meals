@@ -31,14 +31,16 @@ var name_list = [NSManagedObject]()
 var dataFetch = 0
 
 func getMeal(date: Date){
-    let calendar = Calendar.current
-    let appDelegate = NSApplication.shared.delegate as! AppDelegate
-    let context = appDelegate.persistentContainer.viewContext
-    let day = calendar.component(.day, from: date)
+    //let calendar = Calendar.current
+    //let appDelegate = NSApplication.shared.delegate as! AppDelegate
+    //let context = appDelegate.persistentContainer.viewContext
+    //let day = calendar.component(.day, from: date)
     //let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Data")
     //request.predicate = NSPredicate(format: "age = %@", "12")
     //request.returnsObjectsAsFaults = false
     var hasCache = false
+    fetchMeal(forDate: date)
+    /* WILL CRASH!
     do {
         let result = try context.fetch(NSFetchRequest(entityName: "Data"))
         
@@ -53,6 +55,7 @@ func getMeal(date: Date){
         
         print("FAILED")
     }
+     */
     if(!hasCache){
         print("NO CACHE")
         fetchMeal(forDate: date)
@@ -65,48 +68,46 @@ func fetchMeal(forDate: Date){
     let year = calendar.component(.year, from: forDate)
     let month = calendar.component(.month, from: forDate)
     let url = URL(string: "https://schoolmenukr.ml/api/high/E100002238?year=\(year)&month=\(month)")
-    
     URLSession.shared.dataTask(with: url!, completionHandler: {
         (data, response, error) in
         if(error != nil){
             print("나는 노력했지만, 급식을 가져올 수 없었지.")
-        }else{
+        } else{
             do{
                 //TODO : "급식이 없습니다" 라는 String 처리
                 let json = try? JSONSerialization.jsonObject(with: data!, options: []) as? [String: Any]
                 if let array = json!!["menu"] as? [Dictionary<String,Any>] {
                     for object in array {
-                        if let object  = object as? [String: Any] { //경고라고? 그럼 이거 없이도 컴파일 하든가
-                            // access all objects in array
-                            var menu: DailyMeal = DailyMeal(date: 0, breakfast: [""], lunch: [""], supper: [""])
-                            
-                            //가끔 날짜가 nil인 경우가 있음
-                            guard let daytoday = Int(object["date"] as! String) else{
+                        // access all objects in array
+                        var menu: DailyMeal = DailyMeal(date: 0, breakfast: [""], lunch: [""], supper: [""])
+                        
+                        //가끔 날짜가 nil인 경우가 있음
+                        guard let daytoday = Int(object["date"] as! String) else{
+                            continue
+                        }
+                        for (key, value) in object {
+                            guard let value = value as? [String] else{
+                                //밥이 없다(아, 점, 저 중)
                                 continue
                             }
-                            for (key, value) in object {
-                                guard let value = value as? [String] else{
-                                    //밥이 없다(아, 점, 저 중)
-                                    continue
-                                }
 
-                                if key == "breakfast" {
-                                    menu.breakfast = value
-                                }
-                                else if key == "lunch" {
-                                    menu.lunch = value
-                                }
-                                else if key == "dinner" {
-                                    menu.supper = value
-                                }
+                            if key == "breakfast" {
+                                menu.breakfast = value
                             }
-                            menu.date = daytoday
-                            meals.append (menu)
+                            else if key == "lunch" {
+                                menu.lunch = value
+                            }
+                            else if key == "dinner" {
+                                menu.supper = value
+                            }
                         }
+                        menu.date = daytoday
+                        meals.append (menu)
                     }
                 }
             }
         }
+        //savemeal() WILL ALSO CRASH
     }).resume()
 }
 
@@ -129,7 +130,7 @@ func savemeal(){
     
 }
 
-func MealatTime(time: Date) -> [String?]{
+func MenuatTime(time: Date) -> [String?]{
     let calendar = Calendar.current
     let day = calendar.component(.day, from: time)
     let hour = calendar.component(.hour, from: time)
@@ -148,6 +149,122 @@ func MealatTime(time: Date) -> [String?]{
     }
     return [""]
 }
+
+func MenuforMeal(time: Date, type: String) -> [String?]{
+    let calendar = Calendar.current
+    let day = calendar.component(.day, from: time)
+    for meal in meals {
+        if meal.date == day {
+            if type == "breakfast" {
+                return meal.breakfast
+            }
+            else if type == "lunch" {
+                return meal.lunch
+            }
+            else {
+                return meal.supper
+            }
+        }
+    }
+    return [""]
+}
+
+func MealtoString(meal : [String]) -> String{
+    var printedmeal = ""
+    for m in meal {
+        guard let m = m as? String else{ //컴파일러 에러 방지용
+            continue
+        }
+        
+        //밥에서 . 및 알러지 정보 숫자 제거
+        let numberlessMeal = (m.components(separatedBy: CharacterSet.decimalDigits)).joined(separator: "")
+        
+        printedmeal = printedmeal + numberlessMeal.replacingOccurrences(of: ".", with: "")
+        printedmeal = printedmeal + "\n"
+    }
+    return printedmeal
+}
+
+func GetDate(date: Date, type: String, prev: Bool) -> Date {
+    if(prev && type == "breakfast"){
+        return Calendar.current.date(byAdding: .day, value: -1, to: date)!
+    }
+    else if (!prev && type == "supper"){
+        return Calendar.current.date(byAdding: .day, value: 1, to: date)!
+    }
+    return date
+}
+
+func GetMealType(type: String, prev: Bool) -> String {
+    if(prev) {
+        if(type == "breakfast"){
+            return "supper"
+        }
+        if(type == "lunch"){
+            return "breakfast"
+        }
+        if(type == "supper"){
+            return "lunch"
+        }
+    }
+    else {
+        if(type == "breakfast"){
+            return "lunch"
+        }
+        if(type == "lunch"){
+            return "supper"
+        }
+        if(type == "supper"){
+            return "breakfast"
+        }
+    }
+    return "breakfast"
+}
+
+func Title(date: Date, hour: Int) -> String{
+    var labelString = ""
+    var dateRef = date
+    let dateFormatter = DateFormatter()
+    dateFormatter.dateFormat = "M/d"
+    var dateString = dateFormatter.string(from: dateRef)
+    let calendar = Calendar.current
+    
+    if hour<9 {
+        labelString = dateString + " - 아침"
+    }
+    else if hour < 14 {
+        labelString = dateString + " - 점심"
+    }
+    else if hour < 19 {
+        labelString = dateString + " - 저녁"
+    }
+    else {
+        dateRef = calendar.date(byAdding: .day, value: 1, to: dateRef)!
+        dateString = dateFormatter.string(from: dateRef)
+        labelString = dateString + " - 아침" //내일 아침
+    }
+    return labelString
+}
+
+func TitleByType(date: Date, type: String) -> String {
+    var labelString = ""
+    let dateRef = date
+    let dateFormatter = DateFormatter()
+    dateFormatter.dateFormat = "M/d"
+    let dateString = dateFormatter.string(from: dateRef)
+ 
+    if type == "breakfast" {
+        labelString = dateString + " - 아침"
+    }
+    else if type == "lunch" {
+        labelString = dateString + " - 점심"
+    }
+    else if type == "supper" {
+        labelString = dateString + " - 저녁"
+    }
+    return labelString
+}
+
 /*
 func save(name:String)
 {

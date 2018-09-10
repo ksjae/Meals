@@ -2,7 +2,7 @@
 //  AppDelegate.swift
 //  Meals
 //
-//  Created by 김승재 on 2018. 8. 9..
+//  Created by 김승재 on 2018. 8. 9.
 //  Copyright © 2018년 Me. All rights reserved.
 //
 
@@ -83,51 +83,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         eventMonitor?.start()
         if let button = statusItem.button {
             popover.show(relativeTo: button.bounds, of: button, preferredEdge: NSRectEdge.minY)
-        }
-        let pViewController = popover.contentViewController as? POViewController
-        
-        var today = Date() //현재 시각 구하기
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "M/d"
-        var dateString = dateFormatter.string(from: today)
-        let calendar = Calendar.current
-        let hour = calendar.component(.hour, from: today)
-        
-        if hour<9 {
-            pViewController?.dateLabel.stringValue = dateString + " - 아침"
-        }
-        else if hour < 14 {
-            pViewController?.dateLabel.stringValue = dateString + " - 점심"
-        }
-        else if hour < 19 {
-            pViewController?.dateLabel.stringValue = dateString + " - 저녁"
-        }
-        else {
-            today = calendar.date(byAdding: .day, value: 1, to: today)!
-            dateString = dateFormatter.string(from: today)
-            pViewController?.dateLabel.stringValue = dateString + " - 아침" //내일 아침
-        }
-        let zip = MealatTime(time: today)
-        
-        
-        var printedmeal = ""
-        for meal in zip {
-            guard let meal = meal as? String else{ //컴파일러 에러 방지용
-                continue
-            }
-            
-            //밥에서 . 및 알러지 정보 숫자 제거
-            let numberlessMeal = (meal.components(separatedBy: CharacterSet.decimalDigits)).joined(separator: "")
-            
-            printedmeal = printedmeal + numberlessMeal.replacingOccurrences(of: ".", with: "")
-            printedmeal = printedmeal + "\n"
-        }
-        
-        pViewController?.mealLabel.stringValue = printedmeal
-        
-        //버튼 클릭 처리
-        pViewController?.observe(\.dateRef) { (object, change) in
-            print("SomeClass object value changed to \(object.dateRef)")
         }
     }
     

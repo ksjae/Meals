@@ -7,16 +7,20 @@
 //
 
 import Cocoa
+import Foundation
 
 class POViewController: NSViewController {
     
-    @objc dynamic var dateRef = Date()
-    @objc dynamic var refreshClicked = 0
-    @objc dynamic var settingClicked = 0
-
+    var dateRef = Date()
+    var mealType = "breakfast" //breakfast, lunch and supper
+    let calendar = Calendar.current
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do view setup here.
+        dateLabel.stringValue = Title(date: dateRef, hour: calendar.component(.hour, from: dateRef))
+        let zip = MenuforMeal(time: dateRef, type: mealType)
+        mealLabel.stringValue = MealtoString(meal: zip as! [String])
     }
     
     @IBOutlet weak var dateLabel: NSTextField!
@@ -24,19 +28,28 @@ class POViewController: NSViewController {
     @IBOutlet weak var mealLabel: NSTextField!
     
     @IBAction func previous(sender: NSButton){
-        dateRef = Calendar.current.date(byAdding: .day, value: 1, to: dateRef)!
+        dateRef = GetDate(date: dateRef, type: mealType, prev: true)
+        mealType = GetMealType(type: mealType, prev: true)
+        let zip = MenuforMeal(time: dateRef, type: mealType)
+        mealLabel.stringValue = MealtoString(meal: zip as! [String])
+        dateLabel.stringValue = TitleByType(date: dateRef, type: mealType)
     }
     
     @IBAction func next(sender: NSButton){
-        dateRef = Calendar.current.date(byAdding: .day, value: -1, to: dateRef)!
+        dateRef = GetDate(date: dateRef, type: mealType, prev: false)
+        mealType = GetMealType(type: mealType, prev: false)
+        let zip = MenuforMeal(time: dateRef, type: mealType)
+        mealLabel.stringValue = MealtoString(meal: zip as! [String])
+        dateLabel.stringValue = TitleByType(date: dateRef, type: mealType)
     }
     
     @IBAction func refresh(sender: NSButton){
-        refreshClicked+=1
+        let zip = MenuatTime(time: dateRef)
+        mealLabel.stringValue = MealtoString(meal: zip as! [String])
     }
     
     @IBAction func settings(sender: NSButton){
-        settingClicked+=1
+        print("Settings")
     }
     
     @IBOutlet weak var spinningwheel: NSProgressIndicator!
