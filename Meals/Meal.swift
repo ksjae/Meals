@@ -221,13 +221,14 @@ func GetMealType(type: String, prev: Bool) -> String {
     return "breakfast"
 }
 
-func Title(date: Date, hour: Int) -> String{
+func Title(date: Date) -> String{
     var labelString = ""
     var dateRef = date
     let dateFormatter = DateFormatter()
     dateFormatter.dateFormat = "M/d"
     var dateString = dateFormatter.string(from: dateRef)
     let calendar = Calendar.current
+    let hour = calendar.component(.hour, from: date)
     
     if hour<9 {
         labelString = dateString + " - 아침"
