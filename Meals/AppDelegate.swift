@@ -20,7 +20,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         //메뉴바에 들어갈 이미지를 그림
         if let button = statusItem.button {
-            button.image = NSImage(named:NSImage.Name("MenuBar"))
+            button.image = NSImage(named:"MenuBar")
             button.action = #selector(determineClick(sender:))
             button.sendAction(on: [.leftMouseUp, .rightMouseUp])
         }
