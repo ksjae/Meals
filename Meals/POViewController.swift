@@ -18,7 +18,8 @@ class POViewController: NSViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do view setup here.
-        let hour = calendar.component(.hour, from: dateRef)
+        
+        let hour = calendar.component(.hour, from: dateRef) //앱 실행된 시각
         
         if hour < 9  {
             mealType = "breakfast"
@@ -26,11 +27,11 @@ class POViewController: NSViewController {
         else if hour < 14 {
             mealType = "lunch"
         }
-        else if hour < 19{
+        else if hour < 19 {
             mealType = "supper"
         }
         else {
-            dateRef = GetDate(date: dateRef, type: mealType, prev: false)
+            dateRef = calendar.date(byAdding: .day, value: 1, to: dateRef)! //19시 이후로는 다음날 보여주기
             mealType = "breakfast"
         }
         dateLabel.stringValue = Title(date: dateRef)
@@ -82,7 +83,7 @@ extension POViewController {
         let identifier = "POViewController"
         //3.
         guard let viewcontroller = storyboard.instantiateController(withIdentifier: identifier) as? POViewController else {
-            fatalError("급식을 표시할 화면을 만들 수 없습니다. 다시 실행시키거나 컴퓨터를 재시작해 보세요.")
+            fatalError("급식을 표시할 화면을 만들 수 없습니다. 다시 실행시키거나 컴퓨터를 재시작해 보세요.\nViewController Instance 생성 오류.")
         }
         return viewcontroller
     }

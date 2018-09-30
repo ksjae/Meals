@@ -38,8 +38,8 @@ func getMeal(date: Date){
     //let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Data")
     //request.predicate = NSPredicate(format: "age = %@", "12")
     //request.returnsObjectsAsFaults = false
-    var hasCache = false
-    fetchMeal(forDate: date)
+    //var hasCache = false
+    let hasCache = false //캐시? 나중에...
     /* WILL CRASH!
     do {
         let result = try context.fetch(NSFetchRequest(entityName: "Data"))
@@ -71,14 +71,13 @@ func fetchMeal(forDate: Date){
     URLSession.shared.dataTask(with: url!, completionHandler: {
         (data, response, error) in
         if(error != nil){
-            print("나는 노력했지만, 급식을 가져올 수 없었지.")
+            print("나는 노력했지만, 급식을 가져올 수 없었지.\nfetchMeal에서 오류 발생. 인터넷에서 받아오기 실패.")
         } else{
             do{
-                //TODO : "급식이 없습니다" 라는 String 처리
                 let json = try? JSONSerialization.jsonObject(with: data!, options: []) as? [String: Any]
-                if let array = json!!["menu"] as? [Dictionary<String,Any>] {
-                    for object in array {
-                        // access all objects in array
+                if let array = json!!["menu"] as? [Dictionary<String,Any>] { //1개의 Dictionary에 1일치 식단이 있음
+                    for object in array { // access all objects in array
+                        
                         var menu: DailyMeal = DailyMeal(date: 0, breakfast: [""], lunch: [""], supper: [""])
                         
                         //가끔 날짜가 nil인 경우가 있음
@@ -90,7 +89,8 @@ func fetchMeal(forDate: Date){
                                 //밥이 없다(아, 점, 저 중)
                                 continue
                             }
-
+                            
+                            //왜인지는 모르겠으나, breakfast-lunch-dinner 순이 아니므로 이렇게 한다
                             if key == "breakfast" {
                                 menu.breakfast = value
                             }
@@ -176,7 +176,7 @@ func MealtoString(meal : [String]) -> String{
             continue
         }
         
-        //밥에서 . 및 알러지 정보 숫자 제거
+        //각 메뉴에서 . 및 알러지 정보 숫자 제거
         let numberlessMeal = (m.components(separatedBy: CharacterSet.decimalDigits)).joined(separator: "")
         
         printedmeal = printedmeal + numberlessMeal.replacingOccurrences(of: ".", with: "")
