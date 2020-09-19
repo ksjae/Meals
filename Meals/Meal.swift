@@ -172,10 +172,6 @@ func MenuforMeal(time: Date, type: String) -> [String?]{
 func MealtoString(meal : [String]) -> String{
     var printedmeal = ""
     for m in meal {
-        guard let m = m as? String else{ //컴파일러 에러 방지용
-            continue
-        }
-        
         //각 메뉴에서 . 및 알러지 정보 숫자 제거
         let numberlessMeal = (m.components(separatedBy: CharacterSet.decimalDigits)).joined(separator: "")
         
