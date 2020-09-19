@@ -74,7 +74,7 @@ func fetchMeal(forDate: Date){
             print("나는 노력했지만, 급식을 가져올 수 없었지.\nfetchMeal에서 오류 발생. 인터넷에서 받아오기 실패.")
         } else{
             do{
-                let json = try? JSONSerialization.jsonObject(with: data!, options: []) as? [String: Any]
+                let json = ((try? JSONSerialization.jsonObject(with: data!, options: []) as? [String: Any]) as [String : Any]??)
                 if let array = json!!["menu"] as? [Dictionary<String,Any>] { //1개의 Dictionary에 1일치 식단이 있음
                     for object in array { // access all objects in array
                         
