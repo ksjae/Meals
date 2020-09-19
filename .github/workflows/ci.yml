@@ -1,0 +1,18 @@
+name: CI
+on: [push]
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+    - name: Checkout Project
+      uses: actions/checkout@v1
+    - name: Show the currently detailed version of Xcode for CLI
+      run: xcode-select -p
+    - name: Show Build Settings
+      run: xcodebuild -project Meals.xcodeproj -scheme Meals -configuration Release -showBuildSettings
+    - name: Show Build SDK
+      run: xcodebuild -project Meals.xcodeproj -scheme Meals -configuration Release -showsdks
+    - name: Show Available Destinations
+      run: xcodebuild -project Meals.xcodeproj -scheme Meals -configuration Release -showdestinations
+    - name: build and test
+      run: xcodebuild clean test -project Meals.xcodeproj -scheme Meals -configuration Release -showBuildTimingSummary
