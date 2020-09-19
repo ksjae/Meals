@@ -15,4 +15,4 @@ jobs:
     - name: Show Available Destinations
       run: xcodebuild -project Meals.xcodeproj -scheme Meals -configuration Release -showdestinations
     - name: build and test
-      run: xcodebuild clean test -project Meals.xcodeproj -scheme Meals -configuration Release -showBuildTimingSummary
+      run: xcodebuild clean -project Meals.xcodeproj -scheme Meals -configuration Release -showBuildTimingSummary
