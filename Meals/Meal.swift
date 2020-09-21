@@ -176,6 +176,7 @@ func MealtoString(meal : [String]) -> String{
         let numberlessMeal = (m.components(separatedBy: CharacterSet.decimalDigits)).joined(separator: "")
         
         printedmeal = printedmeal + numberlessMeal.replacingOccurrences(of: ".", with: "")
+        printedmeal =  printedmeal.replacingOccurrences(of: "_", with: "")
         printedmeal = printedmeal + "\n"
     }
     return printedmeal
