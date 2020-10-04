@@ -46,10 +46,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let event = NSApp.currentEvent!
         if event.type == NSEvent.EventType.rightMouseUp {
             constructMenu()
-            statusItem.menu = nil
         }
         else {
-            statusItem.menu = nil
             self.togglePopover(sender: sender)
         }
     }
@@ -63,11 +61,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     func constructMenu() {
         let menu = NSMenu()
-        
         menu.addItem(NSMenuItem(title: "종료", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
         
         statusItem.menu = menu
-        statusItem.popUpMenu(menu)
+        statusItem.button?.performClick(nil)
+        statusItem.menu = nil
     }
     
     @objc func togglePopover(sender: Any?) {
