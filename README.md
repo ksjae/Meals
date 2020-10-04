@@ -1,12 +1,13 @@
 # Meals
-인천과학예술영재학교의 밥 메뉴, 이제 앱으로
+[![Build Status](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fksjae%2FMeals%2Fbadge%3Fref%3Dmaster&style=flat)](https://actions-badge.atrox.dev/ksjae/Meals/goto?ref=master)
 
-Mac 및 iOS 등 애플 전용입니다
+인천과학예술영재학교 급식 메뉴를 알려주는 메뉴 바 앱입니다.
 
-macOS : 개발중 (https://github.com/ksjae/Meals/releases)
+## 특징
+- 시간대에 맞는 급식 메뉴를 찾아 알려줍니다(11시에는 점심을 알려주는 등)
+- 직접 파싱하지 않아 교육청 사이트 변경에 영향을 받지 않습니다
+- 100% Swift로만 작성됨
 
-iOS : 개발중 (개발자 계정이 없으므로 따로 Release는 하지 않습니다. 1주일마다 새로 다운받기 싫으시죠?)
-
-watchOS : 개발 계획
-
-tvOS : 계획 없음
+## 출시 계획
+- macOS 빌드 및 릴리스됨
+- iOS/watchOS/tvOS용 제작 계획 없음
