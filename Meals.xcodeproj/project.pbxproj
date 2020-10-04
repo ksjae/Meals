@@ -12,7 +12,6 @@
 		1BB53736211DB818009ABC92 /* Meal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BB53735211DB818009ABC92 /* Meal.swift */; };
 		1BB53738211DBCDC009ABC92 /* EventMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BB53737211DBCDC009ABC92 /* EventMonitor.swift */; };
 		1BE594D4211C63730044972A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE594D3211C63730044972A /* AppDelegate.swift */; };
-		1BE594D6211C63730044972A /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE594D5211C63730044972A /* ViewController.swift */; };
 		1BE594D8211C63740044972A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1BE594D7211C63740044972A /* Assets.xcassets */; };
 		1BE594DB211C63740044972A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1BE594D9211C63740044972A /* Main.storyboard */; };
 		1BE594E7211C63740044972A /* MealsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE594E6211C63740044972A /* MealsTests.swift */; };
@@ -45,7 +44,6 @@
 		1BB5373D211DD333009ABC92 /* MealsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MealsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		1BB5373E211DD333009ABC92 /* MealsUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MealsUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		1BE594D3211C63730044972A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		1BE594D5211C63730044972A /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		1BE594D7211C63740044972A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1BE594DA211C63740044972A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		1BE594DC211C63740044972A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -99,7 +97,6 @@
 			children = (
 				1BE594D3211C63730044972A /* AppDelegate.swift */,
 				1BB53735211DB818009ABC92 /* Meal.swift */,
-				1BE594D5211C63730044972A /* ViewController.swift */,
 				1BE594D7211C63740044972A /* Assets.xcassets */,
 				1BB53731211DAD10009ABC92 /* POViewController.swift */,
 				1BE594D9211C63740044972A /* Main.storyboard */,
@@ -270,7 +267,6 @@
 				1BB53736211DB818009ABC92 /* Meal.swift in Sources */,
 				1BB53732211DAD10009ABC92 /* POViewController.swift in Sources */,
 				1BB53738211DBCDC009ABC92 /* EventMonitor.swift in Sources */,
-				1BE594D6211C63730044972A /* ViewController.swift in Sources */,
 				1BE594D4211C63730044972A /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
